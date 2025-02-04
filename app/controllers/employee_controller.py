@@ -12,6 +12,9 @@ employee_bp = Blueprint("employee", __name__)
 def get_employees():
     department_id = request.args.get("department")
     if department_id:
+        department = Department.get_by_id(department_id)
+        if not department:
+            return jsonify({"error": "Departamento no encontrado"}), 404
         employees = Employee.query.filter_by(department_id=department_id).all()
     else:
         employees = Employee.get_all()
