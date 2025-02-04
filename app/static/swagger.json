@@ -83,15 +83,31 @@
                 }
             }
         },
-        "/api/user/{user_id}": {
+        "/api/users": {
+            "get": {
+                "tags": ["User"],
+                "summary": "Obtiene la lista de todos los usuarios",
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuarios",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/{user_id}": {
             "get": {
                 "tags": ["User"],
                 "summary": "Obtiene un usuario por ID",
-                "security": [
-                    {
-                        "JWTAuth": []
-                    }
-                ],
                 "parameters": [
                     {
                         "name": "user_id",
@@ -121,11 +137,6 @@
             "put": {
                 "tags": ["User"],
                 "summary": "Actualiza un usuario por ID",
-                "security": [
-                    {
-                        "JWTAuth": []
-                    }
-                ],
                 "parameters": [
                     {
                         "name": "user_id",
@@ -166,11 +177,6 @@
             "delete": {
                 "tags": ["User"],
                 "summary": "Elimina un usuario por ID",
-                "security": [
-                    {
-                        "JWTAuth": []
-                    }
-                ],
                 "parameters": [
                     {
                         "name": "user_id",
@@ -191,32 +197,6 @@
                 }
             }
         },
-        "/api/users": {
-            "get": {
-                "tags": ["User"],
-                "summary": "Obtiene la lista de todos los usuarios",
-                "security": [
-                    {
-                        "JWTAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Lista de usuarios",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/User"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/employees": {
             "get": {
                 "tags": ["Employee"],
@@ -224,6 +204,17 @@
                 "security": [
                     {
                         "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "department",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID del departamento para filtrar empleados"
                     }
                 ],
                 "responses": {
@@ -281,6 +272,9 @@
                     },
                     "400": {
                         "description": "Faltan datos requeridos"
+                    },
+                    "404": {
+                        "description": "Departamento no encontrado"
                     }
                 }
             }
@@ -395,42 +389,6 @@
                     },
                     "404": {
                         "description": "Empleado no encontrado"
-                    }
-                }
-            }
-        },
-        "/api/employees/department/{department_id}": {
-            "get": {
-                "tags": ["Employee"],
-                "summary": "Obtiene empleados por departamento",
-                "security": [
-                    {
-                        "JWTAuth": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "name": "department_id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Lista de empleados en el departamento",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Employee"
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -618,6 +576,12 @@
                     },
                     "username": {
                         "type": "string"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
                     }
                 }
             },
