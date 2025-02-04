@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_swagger_ui import get_swaggerui_blueprint
+from flask_cors import CORS
 
 from controllers.employee_controller import employee_bp
 from controllers.department_controller import department_bp
@@ -25,6 +26,9 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 jwt = JWTManager(app)
+
+# Permitir CORS
+CORS(app)
 
 app.register_blueprint(department_bp, url_prefix="/api")
 app.register_blueprint(employee_bp, url_prefix="/api")

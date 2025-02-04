@@ -2,3 +2,4 @@ flask
 flask-sqlalchemy
 Flask-JWT-Extended
 flask-swagger-ui
+flask-cors
